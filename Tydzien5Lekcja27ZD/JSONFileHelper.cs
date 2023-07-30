@@ -1,6 +1,7 @@
 ﻿using Newtonsoft.Json;
 using System;
 using System.IO;
+using System.Windows.Forms;
 
 namespace Tydzien5Lekcja27ZD
 {
@@ -30,7 +31,30 @@ namespace Tydzien5Lekcja27ZD
 			var json = File.ReadAllText(_filePath);
 
 			if (JsonConvert.DeserializeObject<T>(json) == null)
-				throw new Exception("DBIsDamaged");
+			{
+				var confirm = MessageBox.Show("Baza danych została uszkodzona, czy chciałbyś usunąć obecną bazę i utworzyć nową?",
+					"Baza danych została uszkodzona",
+					MessageBoxButtons.OKCancel,
+					MessageBoxIcon.Error);
+
+				if (confirm == DialogResult.OK)
+				{
+					File.Delete(Program.DataPath);
+					Directory.Delete(Program.ResourcesPath, true);
+					Directory.CreateDirectory(Program.ResourcesPath);
+
+					return new T();
+				}
+				else
+				{
+					MessageBox.Show("Program zostanie zamknięty, skontaktuj się ze wsparciem technicznym.",
+						"Baza danych została uszkodzona",
+						MessageBoxButtons.OK,
+						MessageBoxIcon.Asterisk);
+
+					throw new Exception("DBIsDamaged");
+				}
+			}
 
 			return JsonConvert.DeserializeObject<T>(json);
 		}

@@ -29,6 +29,7 @@ namespace Tydzien5Lekcja27ZD.Forms
 		/// </summary>
 		private void InitializeComponent()
 		{
+			System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(AddEditEmployee));
 			this.pbEmployee = new System.Windows.Forms.PictureBox();
 			this.btnAddEditEmployee = new System.Windows.Forms.Button();
 			this.lbFirstName = new System.Windows.Forms.Label();
@@ -53,7 +54,8 @@ namespace Tydzien5Lekcja27ZD.Forms
 			// 
 			// pbEmployee
 			// 
-			this.pbEmployee.BorderStyle = System.Windows.Forms.BorderStyle.Fixed3D;
+			this.pbEmployee.BackColor = System.Drawing.Color.White;
+			this.pbEmployee.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
 			this.pbEmployee.Cursor = System.Windows.Forms.Cursors.Hand;
 			this.pbEmployee.Image = global::Tydzien5Lekcja27ZD.Properties.Resources.defaultEmployeeAvatar;
 			this.pbEmployee.Location = new System.Drawing.Point(30, 22);
@@ -68,17 +70,18 @@ namespace Tydzien5Lekcja27ZD.Forms
 			// 
 			this.btnAddEditEmployee.Cursor = System.Windows.Forms.Cursors.Hand;
 			this.btnAddEditEmployee.ForeColor = System.Drawing.Color.Black;
-			this.btnAddEditEmployee.Location = new System.Drawing.Point(112, 433);
+			this.btnAddEditEmployee.Location = new System.Drawing.Point(95, 435);
 			this.btnAddEditEmployee.Name = "btnAddEditEmployee";
-			this.btnAddEditEmployee.Size = new System.Drawing.Size(104, 23);
+			this.btnAddEditEmployee.Size = new System.Drawing.Size(148, 23);
 			this.btnAddEditEmployee.TabIndex = 1;
-			this.btnAddEditEmployee.Text = "Dodaj pracownika";
+			this.btnAddEditEmployee.Text = "Dodaj nowego pracownika";
 			this.btnAddEditEmployee.UseVisualStyleBackColor = true;
 			this.btnAddEditEmployee.Click += new System.EventHandler(this.btnAddEditEmployee_Click);
 			// 
 			// lbFirstName
 			// 
 			this.lbFirstName.AutoSize = true;
+			this.lbFirstName.BackColor = System.Drawing.Color.Transparent;
 			this.lbFirstName.ForeColor = System.Drawing.Color.Black;
 			this.lbFirstName.Location = new System.Drawing.Point(152, 51);
 			this.lbFirstName.Name = "lbFirstName";
@@ -88,6 +91,7 @@ namespace Tydzien5Lekcja27ZD.Forms
 			// 
 			// tbFirstName
 			// 
+			this.tbFirstName.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
 			this.tbFirstName.Location = new System.Drawing.Point(211, 48);
 			this.tbFirstName.Name = "tbFirstName";
 			this.tbFirstName.Size = new System.Drawing.Size(95, 20);
@@ -96,6 +100,7 @@ namespace Tydzien5Lekcja27ZD.Forms
 			// lbId
 			// 
 			this.lbId.AutoSize = true;
+			this.lbId.BackColor = System.Drawing.Color.Transparent;
 			this.lbId.ForeColor = System.Drawing.Color.Black;
 			this.lbId.Location = new System.Drawing.Point(152, 25);
 			this.lbId.Name = "lbId";
@@ -106,6 +111,7 @@ namespace Tydzien5Lekcja27ZD.Forms
 			// lbDateOfEmployment
 			// 
 			this.lbDateOfEmployment.AutoSize = true;
+			this.lbDateOfEmployment.BackColor = System.Drawing.Color.Transparent;
 			this.lbDateOfEmployment.ForeColor = System.Drawing.Color.Black;
 			this.lbDateOfEmployment.Location = new System.Drawing.Point(27, 184);
 			this.lbDateOfEmployment.Name = "lbDateOfEmployment";
@@ -116,6 +122,7 @@ namespace Tydzien5Lekcja27ZD.Forms
 			// lbSalary
 			// 
 			this.lbSalary.AutoSize = true;
+			this.lbSalary.BackColor = System.Drawing.Color.Transparent;
 			this.lbSalary.ForeColor = System.Drawing.Color.Black;
 			this.lbSalary.Location = new System.Drawing.Point(152, 103);
 			this.lbSalary.Name = "lbSalary";
@@ -126,6 +133,7 @@ namespace Tydzien5Lekcja27ZD.Forms
 			// lbLastName
 			// 
 			this.lbLastName.AutoSize = true;
+			this.lbLastName.BackColor = System.Drawing.Color.Transparent;
 			this.lbLastName.ForeColor = System.Drawing.Color.Black;
 			this.lbLastName.Location = new System.Drawing.Point(152, 77);
 			this.lbLastName.Name = "lbLastName";
@@ -136,6 +144,7 @@ namespace Tydzien5Lekcja27ZD.Forms
 			// lbDateOfDismissal
 			// 
 			this.lbDateOfDismissal.AutoSize = true;
+			this.lbDateOfDismissal.BackColor = System.Drawing.Color.Transparent;
 			this.lbDateOfDismissal.ForeColor = System.Drawing.Color.Black;
 			this.lbDateOfDismissal.Location = new System.Drawing.Point(27, 253);
 			this.lbDateOfDismissal.Name = "lbDateOfDismissal";
@@ -146,6 +155,7 @@ namespace Tydzien5Lekcja27ZD.Forms
 			// lbComments
 			// 
 			this.lbComments.AutoSize = true;
+			this.lbComments.BackColor = System.Drawing.Color.Transparent;
 			this.lbComments.ForeColor = System.Drawing.Color.Black;
 			this.lbComments.Location = new System.Drawing.Point(27, 305);
 			this.lbComments.Name = "lbComments";
@@ -155,6 +165,7 @@ namespace Tydzien5Lekcja27ZD.Forms
 			// 
 			// tbId
 			// 
+			this.tbId.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
 			this.tbId.Cursor = System.Windows.Forms.Cursors.No;
 			this.tbId.Enabled = false;
 			this.tbId.Location = new System.Drawing.Point(263, 22);
@@ -174,6 +185,7 @@ namespace Tydzien5Lekcja27ZD.Forms
 			// 
 			// tbLastName
 			// 
+			this.tbLastName.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
 			this.tbLastName.Location = new System.Drawing.Point(211, 74);
 			this.tbLastName.Name = "tbLastName";
 			this.tbLastName.Size = new System.Drawing.Size(95, 20);
@@ -181,6 +193,7 @@ namespace Tydzien5Lekcja27ZD.Forms
 			// 
 			// tbSalary
 			// 
+			this.tbSalary.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
 			this.tbSalary.Location = new System.Drawing.Point(239, 100);
 			this.tbSalary.Name = "tbSalary";
 			this.tbSalary.Size = new System.Drawing.Size(67, 20);
@@ -196,6 +209,7 @@ namespace Tydzien5Lekcja27ZD.Forms
 			// 
 			// rtbComments
 			// 
+			this.rtbComments.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
 			this.rtbComments.Location = new System.Drawing.Point(30, 321);
 			this.rtbComments.Name = "rtbComments";
 			this.rtbComments.Size = new System.Drawing.Size(276, 96);
@@ -205,20 +219,22 @@ namespace Tydzien5Lekcja27ZD.Forms
 			// cbPerpetualContract
 			// 
 			this.cbPerpetualContract.AutoSize = true;
+			this.cbPerpetualContract.BackColor = System.Drawing.Color.Transparent;
 			this.cbPerpetualContract.Cursor = System.Windows.Forms.Cursors.Hand;
 			this.cbPerpetualContract.Location = new System.Drawing.Point(30, 233);
 			this.cbPerpetualContract.Name = "cbPerpetualContract";
 			this.cbPerpetualContract.Size = new System.Drawing.Size(184, 17);
 			this.cbPerpetualContract.TabIndex = 16;
 			this.cbPerpetualContract.Text = "Zatrudniony na czas nieokreślony";
-			this.cbPerpetualContract.UseVisualStyleBackColor = true;
+			this.cbPerpetualContract.UseVisualStyleBackColor = false;
 			this.cbPerpetualContract.CheckedChanged += new System.EventHandler(this.cbPerpetualContract_CheckedChanged);
 			// 
 			// lbStatus
 			// 
 			this.lbStatus.AutoSize = true;
+			this.lbStatus.BackColor = System.Drawing.Color.Transparent;
 			this.lbStatus.Font = new System.Drawing.Font("Microsoft Sans Serif", 15.75F, System.Drawing.FontStyle.Bold);
-			this.lbStatus.Location = new System.Drawing.Point(39, 140);
+			this.lbStatus.Location = new System.Drawing.Point(51, 140);
 			this.lbStatus.Name = "lbStatus";
 			this.lbStatus.Size = new System.Drawing.Size(79, 25);
 			this.lbStatus.TabIndex = 17;
@@ -227,9 +243,10 @@ namespace Tydzien5Lekcja27ZD.Forms
 			// lbStatusState
 			// 
 			this.lbStatusState.AutoSize = true;
+			this.lbStatusState.BackColor = System.Drawing.Color.Transparent;
 			this.lbStatusState.Font = new System.Drawing.Font("Microsoft Sans Serif", 15.75F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
 			this.lbStatusState.ForeColor = System.Drawing.Color.Green;
-			this.lbStatusState.Location = new System.Drawing.Point(124, 140);
+			this.lbStatusState.Location = new System.Drawing.Point(140, 140);
 			this.lbStatusState.Name = "lbStatusState";
 			this.lbStatusState.Size = new System.Drawing.Size(182, 25);
 			this.lbStatusState.TabIndex = 18;
@@ -239,8 +256,8 @@ namespace Tydzien5Lekcja27ZD.Forms
 			// 
 			this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
 			this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-			this.BackColor = System.Drawing.Color.Gainsboro;
-			this.ClientSize = new System.Drawing.Size(338, 479);
+			this.BackColor = System.Drawing.SystemColors.Control;
+			this.ClientSize = new System.Drawing.Size(334, 479);
 			this.Controls.Add(this.lbStatusState);
 			this.Controls.Add(this.lbStatus);
 			this.Controls.Add(this.cbPerpetualContract);
@@ -262,6 +279,11 @@ namespace Tydzien5Lekcja27ZD.Forms
 			this.Controls.Add(this.pbEmployee);
 			this.Cursor = System.Windows.Forms.Cursors.Arrow;
 			this.ForeColor = System.Drawing.Color.Black;
+			this.Icon = ((System.Drawing.Icon)(resources.GetObject("$this.Icon")));
+			this.MaximizeBox = false;
+			this.MaximumSize = new System.Drawing.Size(350, 518);
+			this.MinimizeBox = false;
+			this.MinimumSize = new System.Drawing.Size(350, 518);
 			this.Name = "AddEditEmployee";
 			this.StartPosition = System.Windows.Forms.FormStartPosition.CenterScreen;
 			this.Text = "Dodawanie nowego pracownika";
