@@ -15,17 +15,18 @@ namespace Tydzien5Lekcja27ZD.Forms
 		private int _employeeId;
 		private bool _employeeImage = false;
 
-		public AddEditEmployee()
+		private Employee _employee;
+
+		public AddEditEmployee(int id = 0)
 		{
 			InitializeComponent();
+			_employeeId = id;
+
 			TabIndexOrder();
-
-			MessageBox.Show("Trzeba dodać zamykanie okna po rozwiązaniu błędu z bazą danych i zapisie pracownika.");
-
-			//pbEmployee.Image = Image.FromFile(Path.Combine(Program.ResourcesPath, $"SMKI.jpg"));
+			GetEmployeeData();
 		}
 
-		public void TabIndexOrder()
+		private void TabIndexOrder()
 		{
 			tbFirstName.TabIndex = 0;
 			tbLastName.TabIndex = 1;
@@ -37,11 +38,52 @@ namespace Tydzien5Lekcja27ZD.Forms
 			btnAddEditEmployee.TabIndex = 7;
 		}
 
+		private void GetEmployeeData()
+		{
+			if(_employeeId != 0)
+			{
+				Text = "Edytowanie danych pracownika";
+				tbId.Select(); // By imię nie podświetlało się.
+
+				var employees = data.DeserializeFromFile();
+				_employee = employees.FirstOrDefault(x => x.Id == _employeeId);
+
+				if (_employee == null)
+					throw new Exception("EmployeeIdEditError");
+
+				FillEmployee();
+			}
+		}
+
+		private void FillEmployee()
+		{
+			if (_employee.Image)
+				pbEmployee.Image = Image.FromFile(Path.Combine(Program.ResourcesPath, $"{_employee.Id}.jpg"));
+
+			tbId.Text = _employee.Id.ToString();
+			tbFirstName.Text = _employee.FirstName;
+			tbLastName.Text = _employee.LastName;
+			tbSalary.Text = _employee.Salary.ToString();
+
+			switch (_employee.Status)
+			{
+				case "active":
+					lbStatusState.Text = "Aktywny";
+					break;
+				case "fired":
+					lbStatusState.Text = "Zwolniony";
+					lbStatusState.ForeColor = Color.Red;
+					break;
+				default:
+					throw new Exception("EmployeeStatusLoadError");
+			}
+
+			dtpDateOfEmployment.Value = _employee.DateOfEmployment;
+			dtpDateOfDismissal.Value = _employee.DateOfDismissal;
+		}
+
 		private void pbEmployee_Click(object sender, EventArgs e)
 		{
-			if (pbEmployee.Image == null)
-				MessageBox.Show("pictureBox jest pusty");
-
 			var openFD = new OpenFileDialog();
 			openFD.Filter = "Pliki obrazów (*.jpg, *.jpeg, *.gif) | *.jpg; *.jpeg; *.gif";
 			if (openFD.ShowDialog() == DialogResult.OK)
@@ -56,84 +98,10 @@ namespace Tydzien5Lekcja27ZD.Forms
 		{
 			if (IsFormFilled())
 			{
-				List<Employee> employees = new List<Employee>();
-				// W przypadku gdy plik z bazą istnieje ale nie posiada zapisanych pracowników funkcja JSON.FileHelper.DeserializeFromFile() chciała by zwrócić nulla, co spowodowało by rzucenie wyjątku przy zapytaniu LINQ w metodzie AssignIdToNewEmployee. Poniższy test wykrywa opisany błąd, użytkownik albo może usunąć bazę i stworzyć nową, albo zakończyć działanie programu i skontaktować się z pomocą techniczną.
-				try
-				{
-					employees = data.DeserializeFromFile();
-				}
-				catch (Exception ex)
-				{
-					if (ex.Message == "DBIsDamaged")
-					{
-						var confirm = MessageBox.Show("Baza danych została uszkodzona, czy chciałbyś usunąć obecną bazę i utworzyć nową?",
-						"Baza danych została uszkodzona",
-						MessageBoxButtons.OKCancel,
-						MessageBoxIcon.Error);
-
-						if (confirm == DialogResult.OK)
-						{
-							File.Delete(Program.DataPath);
-							Directory.Delete(Program.ResourcesPath, true);
-							Directory.CreateDirectory(Program.ResourcesPath);
-
-							employees = data.DeserializeFromFile();
-						}
-						else
-						{
-							MessageBox.Show("Program zostanie zamknięty, skontaktuj się ze wsparciem technicznym.",
-								"Baza danych została uszkodzona",
-								MessageBoxButtons.OK,
-								MessageBoxIcon.Asterisk);
-
-							throw;
-						}
-					}
-				}
-				//DBIsDamagedExceptionTest(employeesList);
+				List<Employee> employees = data.DeserializeFromFile();
 				AssignIdToNewEmployee(employees);
-
-
 				AddEmployeeToList(employees);
-
 				data.SerializeToFile(employees);
-			}
-		}
-
-		private void DBIsDamagedExceptionTest(List<Employee> employees)
-		// Do weryfikacji, nie działa poprawnie - zwraca pustą listę.
-		{
-			try
-			{
-				employees = data.DeserializeFromFile();
-			}
-			catch (Exception ex)
-			{
-				if (ex.Message == "DBIsDamaged")
-				{
-					var confirm = MessageBox.Show("Baza danych została uszkodzona, czy chciałbyś usunąć obecną bazę i utworzyć nową?",
-					"Baza danych została uszkodzona",
-					MessageBoxButtons.OKCancel,
-					MessageBoxIcon.Error);
-
-					if (confirm == DialogResult.OK)
-					{
-						File.Delete(Program.DataPath);
-						Directory.Delete(Program.ResourcesPath, true);
-						Directory.CreateDirectory(Program.ResourcesPath);
-
-						employees = data.DeserializeFromFile();
-					}
-					else
-					{
-						MessageBox.Show("Program zostanie zamknięty, skontaktuj się ze wsparciem technicznym.",
-							"Baza danych została uszkodzona",
-							MessageBoxButtons.OK,
-							MessageBoxIcon.Asterisk);
-
-						throw;
-					}
-				}
 			}
 		}
 
@@ -162,8 +130,8 @@ namespace Tydzien5Lekcja27ZD.Forms
 					FirstName = tbFirstName.Text,
 					LastName = tbLastName.Text,
 					Image = _employeeImage,
-					DateOfEmployment = dtpDateOfEmployment.Value,
-					DateOfDismissal = cbPerpetualContract.Checked ? dtpDateOfDismissal.MaxDate : dtpDateOfDismissal.Value,
+					DateOfEmployment = dtpDateOfEmployment.Value.Date,
+					DateOfDismissal = cbPerpetualContract.Checked ? dtpDateOfDismissal.Value.Date.AddYears(100) : dtpDateOfDismissal.Value.Date,
 					PerpetualContract = cbPerpetualContract.Checked,
 					Salary = salary,
 					Comments = rtbComments.Text
@@ -173,6 +141,8 @@ namespace Tydzien5Lekcja27ZD.Forms
 					pbEmployee.Image.Save(Path.Combine(Program.ResourcesPath, $"{_employeeId}.jpg"));
 
 				employees.Add(employee);
+
+				Close();
 			}
 		}
 

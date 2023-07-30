@@ -23,7 +23,7 @@ namespace Tydzien5Lekcja27ZD
 
 			Application.EnableVisualStyles();
 			Application.SetCompatibleTextRenderingDefault(false);
-			Application.Run(new AddEditEmployee());
+			Application.Run(new Main());
 
 		}
 	}
