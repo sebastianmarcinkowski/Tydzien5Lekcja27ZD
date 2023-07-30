@@ -1,7 +1,7 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.IO;
 using System.Windows.Forms;
-using Tydzien5Lekcja27ZD.Forms;
 
 namespace Tydzien5Lekcja27ZD
 {
@@ -15,15 +15,45 @@ namespace Tydzien5Lekcja27ZD
 			Path.GetDirectoryName(AppDomain.CurrentDomain.BaseDirectory),
 			"Resources");
 
+		public static List<string> ResourceTrash;
+
+		public static string ResourceTrashPath = Path.Combine(
+			Path.GetDirectoryName(AppDomain.CurrentDomain.BaseDirectory),
+			"resource-trash.json");
+
 		[STAThread]
 		static void Main()
 		{
-			if (!Directory.Exists(ResourcesPath))
-				Directory.CreateDirectory(ResourcesPath);
+			try
+			{
+				JSONFileHelper<List<string>> resourceTrash = new JSONFileHelper<List<string>>(ResourceTrashPath);
 
-			Application.EnableVisualStyles();
-			Application.SetCompatibleTextRenderingDefault(false);
-			Application.Run(new Main());
+				ResourceTrash = resourceTrash.DeserializeFromFile();
+
+				foreach (var image in ResourceTrash)
+				{
+					if (File.Exists(Path.Combine(Program.ResourcesPath, $"{image}.jpg")))
+						File.Delete(Path.Combine(Program.ResourcesPath, $"{image}.jpg"));
+				}
+
+				ResourceTrash = new List<string>();
+
+				if (!Directory.Exists(ResourcesPath))
+					Directory.CreateDirectory(ResourcesPath);
+
+				Application.EnableVisualStyles();
+				Application.SetCompatibleTextRenderingDefault(false);
+				Application.Run(new Main());
+
+				resourceTrash.SerializeToFile(ResourceTrash);
+			}
+			catch (Exception)
+			{
+				MessageBox.Show("Wystąpił błąd programu, aplikacja zostanie zamknięta, skontaktuj się ze wsparciem technicznym!",
+					"Błąd krytyczny",
+					MessageBoxButtons.OK,
+					MessageBoxIcon.Error);
+			}
 
 		}
 	}

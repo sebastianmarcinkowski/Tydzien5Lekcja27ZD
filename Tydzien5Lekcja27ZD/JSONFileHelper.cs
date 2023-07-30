@@ -33,7 +33,7 @@ namespace Tydzien5Lekcja27ZD
 			if (JsonConvert.DeserializeObject<T>(json) == null)
 			{
 				var confirm = MessageBox.Show("Baza danych została uszkodzona, czy chciałbyś usunąć obecną bazę i utworzyć nową?",
-					"Baza danych została uszkodzona",
+					"Baza danych została uszkodzona!",
 					MessageBoxButtons.OKCancel,
 					MessageBoxIcon.Error);
 
@@ -48,9 +48,9 @@ namespace Tydzien5Lekcja27ZD
 				else
 				{
 					MessageBox.Show("Program zostanie zamknięty, skontaktuj się ze wsparciem technicznym.",
-						"Baza danych została uszkodzona",
+						"Baza danych została uszkodzona!",
 						MessageBoxButtons.OK,
-						MessageBoxIcon.Asterisk);
+						MessageBoxIcon.Error);
 
 					throw new Exception("DBIsDamaged");
 				}

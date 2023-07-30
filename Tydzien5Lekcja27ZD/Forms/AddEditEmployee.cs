@@ -13,7 +13,8 @@ namespace Tydzien5Lekcja27ZD.Forms
 		private JSONFileHelper<List<Employee>> data = new JSONFileHelper<List<Employee>>(Program.DataPath);
 
 		private int _employeeId;
-		private bool _employeeImage = false;
+		private bool _setImage = false;
+		private string _employeeStatus = "active";
 
 		private Employee _employee;
 
@@ -40,10 +41,12 @@ namespace Tydzien5Lekcja27ZD.Forms
 
 		private void GetEmployeeData()
 		{
-			if(_employeeId != 0)
+			if (_employeeId != 0)
 			{
 				Text = "Edytowanie danych pracownika";
 				tbId.Select(); // By imię nie podświetlało się.
+
+				btnAddEditEmployee.Text = "Zapisz zmiany";
 
 				var employees = data.DeserializeFromFile();
 				_employee = employees.FirstOrDefault(x => x.Id == _employeeId);
@@ -57,8 +60,16 @@ namespace Tydzien5Lekcja27ZD.Forms
 
 		private void FillEmployee()
 		{
-			if (_employee.Image)
-				pbEmployee.Image = Image.FromFile(Path.Combine(Program.ResourcesPath, $"{_employee.Id}.jpg"));
+			if (_employee.Image != Guid.Parse("00000000-0000-0000-0000-000000000000"))
+			{
+				if (File.Exists(Path.Combine(Program.ResourcesPath, $"{_employee.Image}.jpg")))
+				{
+					pbEmployee.Image = Image.FromFile(Path.Combine(Program.ResourcesPath, $"{_employee.Image}.jpg"));
+					_setImage = true;
+				}
+				else
+					_employee.Image = Guid.Parse("00000000-0000-0000-0000-000000000000");
+			}
 
 			tbId.Text = _employee.Id.ToString();
 			tbFirstName.Text = _employee.FirstName;
@@ -79,29 +90,58 @@ namespace Tydzien5Lekcja27ZD.Forms
 			}
 
 			dtpDateOfEmployment.Value = _employee.DateOfEmployment;
+			cbPerpetualContract.Checked = _employee.PerpetualContract;
 			dtpDateOfDismissal.Value = _employee.DateOfDismissal;
+
+			rtbComments.Text = _employee.Comments;
+
+			if (_employee.Status == "fired")
+			{
+				pbEmployee.Enabled = false;
+				tbFirstName.Enabled = false;
+				tbLastName.Enabled = false;
+				tbSalary.Enabled = false;
+				dtpDateOfEmployment.Enabled = false;
+				cbPerpetualContract.Enabled = false;
+				dtpDateOfDismissal.Enabled = false;
+
+				_employeeStatus = "fired";
+			}
 		}
 
 		private void pbEmployee_Click(object sender, EventArgs e)
 		{
-			var openFD = new OpenFileDialog();
-			openFD.Filter = "Pliki obrazów (*.jpg, *.jpeg, *.gif) | *.jpg; *.jpeg; *.gif";
-			if (openFD.ShowDialog() == DialogResult.OK)
+			using (var openFD = new OpenFileDialog())
 			{
-				pbEmployee.Image = new Bitmap(openFD.FileName);
-			}
+				openFD.Filter = "Pliki obrazów (*.jpg, *.jpeg, *.gif) | *.jpg; *.jpeg; *.gif";
+				if (openFD.ShowDialog() == DialogResult.OK)
+				{
+					pbEmployee.Image = new Bitmap(openFD.FileName);
+				}
 
-			_employeeImage = true;
+				_setImage = true;
+			}
 		}
 
 		private void btnAddEditEmployee_Click(object sender, EventArgs e)
 		{
 			if (IsFormFilled())
 			{
-				List<Employee> employees = data.DeserializeFromFile();
-				AssignIdToNewEmployee(employees);
+				var employees = data.DeserializeFromFile();
+
+				if (_employeeId != 0)
+				{
+					var employee = employees.Where(x => x.Id == _employeeId).FirstOrDefault();
+
+					if (employee.Image != Guid.Parse("00000000-0000-0000-0000-000000000000"))
+						Program.ResourceTrash.Add(employee.Image.ToString());
+
+					employees.RemoveAll(x => x.Id == _employeeId);
+				}
+				else
+					AssignIdToNewEmployee(employees);
+
 				AddEmployeeToList(employees);
-				data.SerializeToFile(employees);
 			}
 		}
 
@@ -117,19 +157,18 @@ namespace Tydzien5Lekcja27ZD.Forms
 
 		private void AddEmployeeToList(List<Employee> employees)
 		{
-			if (!int.TryParse(tbSalary.Text, out int salary))
+			if (!decimal.TryParse(tbSalary.Text, out decimal salary))
 			{
-				MessageBox.Show("Podaj poprawną wartość wynagrodzenia!");
+				throw new Exception("AddEmployeeSalaryError");
 			}
 			else
 			{
 				var employee = new Employee
 				{
 					Id = _employeeId,
-					Status = "active",
+					Status = _employeeStatus,
 					FirstName = tbFirstName.Text,
 					LastName = tbLastName.Text,
-					Image = _employeeImage,
 					DateOfEmployment = dtpDateOfEmployment.Value.Date,
 					DateOfDismissal = cbPerpetualContract.Checked ? dtpDateOfDismissal.Value.Date.AddYears(100) : dtpDateOfDismissal.Value.Date,
 					PerpetualContract = cbPerpetualContract.Checked,
@@ -137,10 +176,15 @@ namespace Tydzien5Lekcja27ZD.Forms
 					Comments = rtbComments.Text
 				};
 
-				if (_employeeImage)
-					pbEmployee.Image.Save(Path.Combine(Program.ResourcesPath, $"{_employeeId}.jpg"));
+				if (_setImage)
+				{
+					employee.Image = Guid.NewGuid();
+					pbEmployee.Image.Save(Path.Combine(Program.ResourcesPath, $"{employee.Image}.jpg"));
+				}
 
 				employees.Add(employee);
+
+				data.SerializeToFile(employees);
 
 				Close();
 			}
@@ -171,6 +215,12 @@ namespace Tydzien5Lekcja27ZD.Forms
 
 			if (!result)
 				MessageBox.Show(mboxText, "Nie wszystkie wymagane pola są uzupełnione", MessageBoxButtons.OK, MessageBoxIcon.Asterisk);
+
+			if (!decimal.TryParse(tbSalary.Text, out decimal tempSalary))
+			{
+				MessageBox.Show("Podaj poprawną wartość wynagrodzenia!");
+				result = false;
+			}
 
 			return result;
 		}
