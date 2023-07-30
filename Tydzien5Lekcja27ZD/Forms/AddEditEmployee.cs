@@ -170,7 +170,6 @@ namespace Tydzien5Lekcja27ZD.Forms
 					FirstName = tbFirstName.Text,
 					LastName = tbLastName.Text,
 					DateOfEmployment = dtpDateOfEmployment.Value.Date,
-					DateOfDismissal = cbPerpetualContract.Checked ? dtpDateOfDismissal.Value.Date.AddYears(100) : dtpDateOfDismissal.Value.Date,
 					PerpetualContract = cbPerpetualContract.Checked,
 					Salary = salary,
 					Comments = rtbComments.Text
@@ -180,6 +179,15 @@ namespace Tydzien5Lekcja27ZD.Forms
 				{
 					employee.Image = Guid.NewGuid();
 					pbEmployee.Image.Save(Path.Combine(Program.ResourcesPath, $"{employee.Image}.jpg"));
+				}
+
+				if(employee.DateOfDismissal.Date.Year == 1 && cbPerpetualContract.Checked)
+				{
+					employee.DateOfDismissal = dtpDateOfEmployment.Value.Date.AddYears(100);
+				}
+				else if (employee.DateOfDismissal.Date.Year == 1)
+				{
+					employee.DateOfDismissal = dtpDateOfDismissal.Value.Date;
 				}
 
 				employees.Add(employee);
