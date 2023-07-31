@@ -23,15 +23,28 @@ namespace Tydzien5Lekcja27ZD.Forms
 			InitializeComponent();
 			_employeeId = id;
 
+			SetSalaryNumericUpDownSettings();
 			TabIndexOrder();
 			GetEmployeeData();
+		}
+
+		private void SetSalaryNumericUpDownSettings()
+		{
+			nudSalary.DecimalPlaces = 2;
+			nudSalary.Minimum = 0.01M;
+			nudSalary.Maximum = decimal.MaxValue;
+			nudSalary.Value = Program.DefaultSalary;
+
+			nudSalary.BorderStyle = BorderStyle.FixedSingle;
+			nudSalary.Cursor = Cursors.IBeam;
+			nudSalary.Controls[0].Visible = false; // Turn off arrows.
 		}
 
 		private void TabIndexOrder()
 		{
 			tbFirstName.TabIndex = 0;
 			tbLastName.TabIndex = 1;
-			tbSalary.TabIndex = 2;
+			nudSalary.TabIndex = 2;
 			dtpDateOfEmployment.TabIndex = 3;
 			cbPerpetualContract.TabIndex = 4;
 			dtpDateOfDismissal.TabIndex = 5;
@@ -74,7 +87,7 @@ namespace Tydzien5Lekcja27ZD.Forms
 			tbId.Text = _employee.Id.ToString();
 			tbFirstName.Text = _employee.FirstName;
 			tbLastName.Text = _employee.LastName;
-			tbSalary.Text = _employee.Salary.ToString();
+			nudSalary.Value = _employee.Salary;
 
 			switch (_employee.Status)
 			{
@@ -91,7 +104,9 @@ namespace Tydzien5Lekcja27ZD.Forms
 
 			dtpDateOfEmployment.Value = _employee.DateOfEmployment;
 			cbPerpetualContract.Checked = _employee.PerpetualContract;
-			dtpDateOfDismissal.Value = _employee.DateOfDismissal;
+
+			if (_employee.DateOfDismissal.HasValue)
+				dtpDateOfDismissal.Value = _employee.DateOfDismissal.Value;
 
 			rtbComments.Text = _employee.Comments;
 
@@ -100,7 +115,7 @@ namespace Tydzien5Lekcja27ZD.Forms
 				pbEmployee.Enabled = false;
 				tbFirstName.Enabled = false;
 				tbLastName.Enabled = false;
-				tbSalary.Enabled = false;
+				nudSalary.Enabled = false;
 				dtpDateOfEmployment.Enabled = false;
 				cbPerpetualContract.Enabled = false;
 				dtpDateOfDismissal.Enabled = false;
@@ -157,45 +172,34 @@ namespace Tydzien5Lekcja27ZD.Forms
 
 		private void AddEmployeeToList(List<Employee> employees)
 		{
-			if (!decimal.TryParse(tbSalary.Text, out decimal salary))
+			var employee = new Employee
 			{
-				throw new Exception("AddEmployeeSalaryError");
+				Id = _employeeId,
+				Status = _employeeStatus,
+				FirstName = tbFirstName.Text,
+				LastName = tbLastName.Text,
+				DateOfEmployment = dtpDateOfEmployment.Value.Date,
+				PerpetualContract = cbPerpetualContract.Checked,
+				Salary = Decimal.Round(nudSalary.Value, 2),
+				Comments = rtbComments.Text
+			};
+
+			if (_setImage)
+			{
+				employee.Image = Guid.NewGuid();
+				pbEmployee.Image.Save(Path.Combine(Program.ResourcesPath, $"{employee.Image}.jpg"));
 			}
+
+			if (cbPerpetualContract.Checked)
+				employee.DateOfDismissal = null;
 			else
-			{
-				var employee = new Employee
-				{
-					Id = _employeeId,
-					Status = _employeeStatus,
-					FirstName = tbFirstName.Text,
-					LastName = tbLastName.Text,
-					DateOfEmployment = dtpDateOfEmployment.Value.Date,
-					PerpetualContract = cbPerpetualContract.Checked,
-					Salary = salary,
-					Comments = rtbComments.Text
-				};
+				employee.DateOfDismissal = dtpDateOfDismissal.Value.Date;
 
-				if (_setImage)
-				{
-					employee.Image = Guid.NewGuid();
-					pbEmployee.Image.Save(Path.Combine(Program.ResourcesPath, $"{employee.Image}.jpg"));
-				}
+			employees.Add(employee);
 
-				if(employee.DateOfDismissal.Date.Year == 1 && cbPerpetualContract.Checked)
-				{
-					employee.DateOfDismissal = dtpDateOfEmployment.Value.Date.AddYears(100);
-				}
-				else if (employee.DateOfDismissal.Date.Year == 1)
-				{
-					employee.DateOfDismissal = dtpDateOfDismissal.Value.Date;
-				}
+			data.SerializeToFile(employees);
 
-				employees.Add(employee);
-
-				data.SerializeToFile(employees);
-
-				Close();
-			}
+			Close();
 		}
 
 		private bool IsFormFilled()
@@ -215,20 +219,8 @@ namespace Tydzien5Lekcja27ZD.Forms
 				result = false;
 			}
 
-			if (tbSalary.Text == "")
-			{
-				mboxText += ",\n- Wynagrodzenie";
-				result = false;
-			}
-
 			if (!result)
 				MessageBox.Show(mboxText, "Nie wszystkie wymagane pola są uzupełnione", MessageBoxButtons.OK, MessageBoxIcon.Asterisk);
-
-			if (!decimal.TryParse(tbSalary.Text, out decimal tempSalary))
-			{
-				MessageBox.Show("Podaj poprawną wartość wynagrodzenia!");
-				result = false;
-			}
 
 			return result;
 		}

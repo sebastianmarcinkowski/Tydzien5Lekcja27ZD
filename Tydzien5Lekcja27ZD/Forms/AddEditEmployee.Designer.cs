@@ -43,13 +43,14 @@ namespace Tydzien5Lekcja27ZD.Forms
 			this.tbId = new System.Windows.Forms.TextBox();
 			this.dtpDateOfEmployment = new System.Windows.Forms.DateTimePicker();
 			this.tbLastName = new System.Windows.Forms.TextBox();
-			this.tbSalary = new System.Windows.Forms.TextBox();
 			this.dtpDateOfDismissal = new System.Windows.Forms.DateTimePicker();
 			this.rtbComments = new System.Windows.Forms.RichTextBox();
 			this.cbPerpetualContract = new System.Windows.Forms.CheckBox();
 			this.lbStatus = new System.Windows.Forms.Label();
 			this.lbStatusState = new System.Windows.Forms.Label();
+			this.nudSalary = new System.Windows.Forms.NumericUpDown();
 			((System.ComponentModel.ISupportInitialize)(this.pbEmployee)).BeginInit();
+			((System.ComponentModel.ISupportInitialize)(this.nudSalary)).BeginInit();
 			this.SuspendLayout();
 			// 
 			// pbEmployee
@@ -191,14 +192,6 @@ namespace Tydzien5Lekcja27ZD.Forms
 			this.tbLastName.Size = new System.Drawing.Size(95, 20);
 			this.tbLastName.TabIndex = 11;
 			// 
-			// tbSalary
-			// 
-			this.tbSalary.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
-			this.tbSalary.Location = new System.Drawing.Point(239, 100);
-			this.tbSalary.Name = "tbSalary";
-			this.tbSalary.Size = new System.Drawing.Size(67, 20);
-			this.tbSalary.TabIndex = 13;
-			// 
 			// dtpDateOfDismissal
 			// 
 			this.dtpDateOfDismissal.Cursor = System.Windows.Forms.Cursors.Hand;
@@ -252,18 +245,37 @@ namespace Tydzien5Lekcja27ZD.Forms
 			this.lbStatusState.TabIndex = 18;
 			this.lbStatusState.Text = "Nowy pracownik";
 			// 
+			// nudSalary
+			// 
+			this.nudSalary.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
+			this.nudSalary.Cursor = System.Windows.Forms.Cursors.Arrow;
+			this.nudSalary.Location = new System.Drawing.Point(239, 100);
+			this.nudSalary.Minimum = new decimal(new int[] {
+            1,
+            0,
+            0,
+            0});
+			this.nudSalary.Name = "nudSalary";
+			this.nudSalary.Size = new System.Drawing.Size(67, 20);
+			this.nudSalary.TabIndex = 19;
+			this.nudSalary.Value = new decimal(new int[] {
+            1,
+            0,
+            0,
+            0});
+			// 
 			// AddEditEmployee
 			// 
 			this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
 			this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
 			this.BackColor = System.Drawing.SystemColors.Control;
 			this.ClientSize = new System.Drawing.Size(334, 479);
+			this.Controls.Add(this.nudSalary);
 			this.Controls.Add(this.lbStatusState);
 			this.Controls.Add(this.lbStatus);
 			this.Controls.Add(this.cbPerpetualContract);
 			this.Controls.Add(this.rtbComments);
 			this.Controls.Add(this.dtpDateOfDismissal);
-			this.Controls.Add(this.tbSalary);
 			this.Controls.Add(this.dtpDateOfEmployment);
 			this.Controls.Add(this.tbLastName);
 			this.Controls.Add(this.tbId);
@@ -288,6 +300,7 @@ namespace Tydzien5Lekcja27ZD.Forms
 			this.StartPosition = System.Windows.Forms.FormStartPosition.CenterScreen;
 			this.Text = "Dodawanie nowego pracownika";
 			((System.ComponentModel.ISupportInitialize)(this.pbEmployee)).EndInit();
+			((System.ComponentModel.ISupportInitialize)(this.nudSalary)).EndInit();
 			this.ResumeLayout(false);
 			this.PerformLayout();
 
@@ -308,11 +321,11 @@ namespace Tydzien5Lekcja27ZD.Forms
 		private System.Windows.Forms.TextBox tbId;
 		private System.Windows.Forms.DateTimePicker dtpDateOfEmployment;
 		private System.Windows.Forms.TextBox tbLastName;
-		private System.Windows.Forms.TextBox tbSalary;
 		private System.Windows.Forms.DateTimePicker dtpDateOfDismissal;
 		private System.Windows.Forms.RichTextBox rtbComments;
 		private System.Windows.Forms.CheckBox cbPerpetualContract;
 		private System.Windows.Forms.Label lbStatus;
 		private System.Windows.Forms.Label lbStatusState;
+		private System.Windows.Forms.NumericUpDown nudSalary;
 	}
 }

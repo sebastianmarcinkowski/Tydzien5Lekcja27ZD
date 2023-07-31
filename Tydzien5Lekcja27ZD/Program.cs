@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.IO;
 using System.Windows.Forms;
+using Tydzien5Lekcja27ZD.Models;
 
 namespace Tydzien5Lekcja27ZD
 {
@@ -20,6 +21,8 @@ namespace Tydzien5Lekcja27ZD
 		public static string ResourceTrashPath = Path.Combine(
 			Path.GetDirectoryName(AppDomain.CurrentDomain.BaseDirectory),
 			"resource-trash.json");
+
+		public static decimal DefaultSalary = 5000M;
 
 		[STAThread]
 		static void Main()
@@ -46,6 +49,19 @@ namespace Tydzien5Lekcja27ZD
 				Application.Run(new Main());
 
 				resourceTrash.SerializeToFile(ResourceTrash);
+
+				//// Kod na cele testowe - wyjątek "Plik jest otwary w innym procesie, nie można go usunąć...".
+				//// Wyczyszczenie kosza nastąpi przed ponownym uruchomieniem.
+
+				//ResourceTrash = resourceTrash.DeserializeFromFile();
+
+				//foreach (var image in ResourceTrash)
+				//{
+				//	if (File.Exists(Path.Combine(Program.ResourcesPath, $"{image}.jpg")))
+				//		File.Delete(Path.Combine(Program.ResourcesPath, $"{image}.jpg"));
+				//}
+
+				//// Koniec kodu na cele testowe.
 			}
 			catch (Exception)
 			{
